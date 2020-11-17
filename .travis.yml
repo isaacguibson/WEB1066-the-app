@@ -1,8 +1,17 @@
 language: java
-jdk:  oraclejdk8
+jdk:
+  - oraclejdk8
 install: "./gradlew clean jar"
 
 script:
-  "./gradlew test"
-  "./gradlew jacocoTestReport"
-  find . -name jacocoTestReport.csv|xargs cat|awk -F',' '{print $3" "$4" "$5}'
+  - "./gradlew test"
+  - "./gradlew jacocoTestReport"
+  - find . -name jacocoTestReport.csv|xargs cat|awk -F',' '{print $3" "$4" "$5}'
+  - "./gradlew test jacocoTestCoverageVerification"
+
+deploy:
+  provider: script
+  script:
+    - ECHO 'WIP'
+  on:
+    all_branches: true
