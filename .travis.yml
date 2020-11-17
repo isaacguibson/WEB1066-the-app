@@ -6,15 +6,52 @@ env:
   
 install: "./gradlew clean jar"
 
-script:
-  - "./gradlew test"
-  - "./gradlew jacocoTestReport"
-  - find . -name jacocoTestReport.csv|xargs cat|awk -F',' '{print $3" "$4" "$5}'
-  - "./gradlew test jacocoTestCoverageVerification"
+stages:
+  - test
+  - deploy
 
-deploy:
-  provider: script
-  script:
-    - ECHO 'WIP'
-  on:
-    all_branches: true
+jobs:
+  - include:
+    - stage: test
+      name: "1 check"
+      install: skip
+      script:
+        - ./gradlew -p ./monolithic/ui check
+      env: COVERAGE=0.5
+    - script:
+        - ./gradlew -p ./monolithic/service/cart check
+      name: "2 check"
+      install: skip
+      env: COVERAGE=0.5
+    - script:
+        - ./gradlew -p ./monolithic/service/user check
+      name: "3 check"
+      install: skip
+      env: COVERAGE=0.5
+    - script:
+        - ./gradlew -p ./monolithic/repository/order check
+      name: "4 check"
+      install: skip
+      env: COVERAGE=0.3
+    - script:
+        - ./gradlew -p ./monolithic/repository/cart check
+      name: "5 check"
+      install: skip
+      env: COVERAGE=0.5
+    - script:
+        - ./gradlew -p ./monolithic/repository/product check
+      name: "6 check"
+      install: skip
+      env: COVERAGE=0.5
+    - script:
+        - ./gradlew -p ./monolithic/repository/user check
+      name: "7 check"
+      install: skip
+      env: COVERAGE=0.3
+    - stage: deploy
+      install: skip
+      deploy:
+        provider: script
+        script: "echo 'WIP'"
+        on:
+          all_branches: true
