@@ -49,6 +49,39 @@ jobs:
       name: "7 check"
       install: skip
       env: COVERAGE=0.3
+    - name: "1 check java9"
+      jdk: oraclejdk9
+      script: ./gradlew -p ./monolithic/ui check
+      env: COVERAGE=0.5
+    - script: ./gradlew -p ./monolithic/service/cart check
+      name: "2 check java9"
+      jdk: oraclejdk9
+      env: COVERAGE=0.5
+    - script: ./gradlew -p ./monolithic/service/user check
+      name: "3 check java9"
+      jdk: oraclejdk9
+      env: COVERAGE=0.5
+    - script: ./gradlew -p ./monolithic/repository/order check
+      name: "4 check java9"
+      jdk: oraclejdk9
+      env: COVERAGE=0.3
+    - script: ./gradlew -p ./monolithic/repository/cart check
+      name: "5 check java9"
+      jdk: oraclejdk9
+      env: COVERAGE=0.5
+    - script: ./gradlew -p ./monolithic/repository/product check
+      name: "6 check java9"
+      jdk: oraclejdk9
+      env: COVERAGE=0.5
+    - script: ./gradlew -p ./monolithic/repository/user check
+      name: "7 check java9"
+      jdk: oraclejdk9
+      env: COVERAGE=0.3
+    - stage: deploy
+      name: "Deploy oraclejdk8"
+      jdk: oraclejdk8
+      install: skip
+      script: skip
     - stage: deploy
       install: skip
       deploy:
